@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App 3: UCP Global Dashboard | Systems Architect</title>
+    <title>UCP Global Dashboard v2.0 | Schelling Dynamics</title>
     <style>
         :root {
             --matrix-green: #00ff41; --void-black: #0d0208; --text-white: #f0fdf4;
@@ -17,32 +17,37 @@
         .layout { display: grid; grid-template-columns: 1fr 400px; gap: 20px; padding: 20px; }
         .card { border: 1px solid var(--border); padding: 1.5rem; border-radius: 8px; background: #000; margin-bottom: 15px; }
 
-        /* GLOBAL MAP: 1000 AGENTS */
-        .map-container { height: 400px; background: #020617; border: 2px solid var(--border); position: relative; display: grid; grid-template-columns: repeat(50, 1fr); gap: 1px; padding: 5px; overflow: hidden; }
-        .agent { width: 100%; height: 100%; background: var(--matrix-green); border-radius: 1px; }
-        .agent.intentional { background: var(--danger-red); box-shadow: 0 0 2px var(--danger-red); }
-        .agent.incidental { background: var(--incidental-orange); }
-        .agent.protected { background: var(--gold); box-shadow: 0 0 5px var(--gold); }
+        /* THE AGENT GRID: 1,000 AGENTS */
+        .grid-container { 
+            height: 350px; background: #020617; border: 2px solid var(--border); 
+            display: grid; grid-template-columns: repeat(50, 1fr); gap: 1px; padding: 5px; 
+        }
+        .agent { width: 100%; height: 100%; background: #14532d; border-radius: 1px; transition: background 0.2s; }
+        .agent.canary { box-shadow: 0 0 5px var(--gold); }
+        .agent.truncated { background: var(--danger-red); box-shadow: 0 0 3px var(--danger-red); }
+        .agent.protected { background: #3b82f6; box-shadow: 0 0 4px #3b82f6; }
 
-        /* DASHBOARD METRICS */
+        /* LIVE METRICS */
         .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
         .m-box { border: 1px solid var(--border); padding: 10px; text-align: center; background: #051a05; }
-        .m-val { font-size: 1.8rem; font-weight: bold; display: block; }
-        .m-label { font-size: 0.7rem; text-transform: uppercase; color: var(--matrix-green); }
+        .m-val { font-size: 1.6rem; font-weight: bold; color: var(--matrix-green); }
+        .m-label { font-size: 0.65rem; text-transform: uppercase; }
 
-        /* CONTROLS */
-        .btn { width: 100%; padding: 12px; border: 1px solid var(--matrix-green); background: none; color: var(--matrix-green); cursor: pointer; font-weight: bold; font-family: inherit; transition: 0.2s; margin-top: 8px; }
+        /* INTERACTIVE CONTROLS */
+        .control-panel { background: #000; padding: 15px; border: 1px solid var(--border); }
+        input[type="range"] { width: 100%; accent-color: var(--matrix-green); cursor: pointer; }
+        .btn { width: 100%; padding: 12px; border: 1px solid var(--matrix-green); background: none; color: var(--matrix-green); cursor: pointer; font-weight: bold; font-family: inherit; margin-top: 10px; }
         .btn:hover { background: var(--matrix-green); color: black; }
         .btn-resistance { border-color: var(--danger-red); color: var(--danger-red); }
         .btn-redesign { border-color: var(--gold); color: var(--gold); }
 
-        /* MODALS */
+        /* OVERLAYS */
         #orientation-overlay, #audit-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .modal { max-width: 750px; border: 2px solid var(--border); padding: 30px; border-radius: 12px; background: #000; box-shadow: 0 0 40px var(--matrix-green); }
+        .modal { max-width: 750px; border: 2px solid var(--border); padding: 30px; border-radius: 12px; background: #000; }
         .audit-card { padding: 20px; border: 1px dashed var(--gold); background: #1a1a00; margin: 20px 0; }
 
         .sidebar { font-size: 0.85rem; border-left: 1px solid var(--border); padding-left: 20px; overflow-y: auto; max-height: 800px; }
-        dt { font-weight: bold; color: var(--gold); margin-top: 15px; border-bottom: 1px solid #14532d; }
+        dt { font-weight: bold; color: var(--gold); margin-top: 15px; }
         dd { margin: 5px 0 10px 0; color: #cbd5e1; }
         .hidden { display: none !important; }
     </style>
@@ -51,76 +56,73 @@
 
 <div id="orientation-overlay">
     <div class="modal">
-        <h2>Systems Architect Orientation: The UCP Dashboard</h2>
-        <p>You have mastered individual defense and specialist coordination. Now, you must manage a population of <strong>1,000 agents</strong>.</p>
-        <p><strong>The Core Truth:</strong> At this scale, harm is often invisible until it reaches a tipping point. You must distinguish between <strong>Intentional Extraction</strong> and <strong>Incidental Depletion</strong>.</p>
-        <p><strong>Diagnosis Determines Strategy:</strong> 
-            If you try to "Redesign" a malicious system, it will simply eat the resources. 
-            If you "Resist" a well-meaning but broken system, you create unnecessary friction.
+        <h2>Systems Architect: Phase 3 Audit</h2>
+        <p>You are now monitoring a population of <strong>1,000 agents</strong> in a high-stress environment (A Crisis Hospital).</p>
+        <p><strong>Look for the Canaries:</strong> As you increase the system load, watch for individual agents flickering red. These are your "Canaries in the Coal Mine." If too many fail, the system hits a <strong>Tipping Point</strong>.</p>
+        <p><strong>Tactical Imperative:</strong> 
+            1. Use the slider to simulate stress. 
+            2. Diagnose: Is the harm <em>Incidental</em> or <em>Intentional</em>?
+            3. Deploy the correct Bond before <strong>Agential Entropy</strong> consumes the grid.
         </p>
-        <button class="btn" onclick="closeModal('orientation-overlay')">Initialize Global Dashboard</button>
+        <button class="btn" onclick="closeModal('orientation-overlay')">Initialize Dashboard</button>
     </div>
 </div>
 
 <div id="audit-overlay" class="hidden">
     <div class="modal">
-        <h2>UCP System-Level Audit</h2>
+        <h2>Final UCP Coherence Audit</h2>
         <div id="audit-content"></div>
-        <button class="btn" onclick="location.reload()">Restart Simulation</button>
+        <button class="btn" onclick="location.reload()">Reset Global State</button>
     </div>
 </div>
 
 <div class="app-container">
     <header>
-        <h1>UCP GLOBAL DASHBOARD v1.0</h1>
-        <p>Tactical Systems Architecture & Extraction Analysis</p>
+        <h1>UCP GLOBAL DASHBOARD v2.0</h1>
+        <p>The Physics of Tipping Points & Systemic Resilience</p>
     </header>
 
     <div class="layout">
         <main>
-            <div class="map-container" id="agent-map"></div>
+            <div class="grid-container" id="grid"></div>
 
             <div class="metric-grid">
-                <div class="m-box"><span class="m-label">System Lambda (&lambda;)</span><span class="m-val" id="lambda-val">0.95</span></div>
-                <div class="m-box"><span class="m-label">Agential Entropy</span><span class="m-val" id="entropy-val">0.05</span></div>
-                <div class="m-box"><span class="m-label">Morphic Fidelity</span><span class="m-val" id="fidelity-val">100%</span></div>
+                <div class="m-box"><span class="m-label">Lambda (&lambda;)</span><div class="m-val" id="lambda-val">1.00</div></div>
+                <div class="m-box"><span class="m-label">Truncated Agents</span><div class="m-val" id="trunc-val" style="color:var(--danger-red)">0</div></div>
+                <div class="m-box"><span class="m-label">Agential Entropy</span><div class="m-val" id="entropy-val">0.00</div></div>
             </div>
 
-            <div class="card">
-                <h3 id="scenario-title">Initializing Population...</h3>
-                <p id="scenario-desc">Standby for systemic diagnostic data.</p>
-                
-                <div id="action-area" class="hidden">
-                    <p><strong>TACTICAL RESPONSE: Deploy Systemic Bonds</strong></p>
-                    <div style="display: flex; gap: 10px;">
-                        <button class="btn btn-resistance" onclick="deployBond('resistance')">Deploy Resistance Bonds (Quadrant 1)</button>
-                        <button class="btn btn-redesign" onclick="deployBond('redesign')">Deploy Redesign Bonds (Quadrant 2)</button>
-                    </div>
+            <div class="control-panel">
+                <div style="display: flex; justify-content: space-between;">
+                    <label><strong>System Load (Environmental Noise $L_{GC}$)</strong></label>
+                    <span id="load-readout" style="color:var(--gold)">0.10</span>
                 </div>
-
-                <button id="next-btn" class="btn" onclick="loadNextScenario()">Enter Simulation Phase</button>
+                <input type="range" id="load-slider" min="0.10" max="1.00" step="0.01" value="0.10" oninput="updateSim()">
+                
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="btn btn-redesign" onclick="applyBond('redesign')">Deploy Redesign Bond (Incidental)</button>
+                    <button class="btn btn-resistance" onclick="applyBond('resistance')">Deploy Resistance Bond (Intentional)</button>
+                </div>
+                <button class="btn" id="finish-btn" style="border-color:#64748b; color:#64748b;" onclick="generateAudit()">Finalize Shift Audit</button>
             </div>
         </main>
 
         <aside class="sidebar">
-            <h2>The Extraction Matrix (HUD Help)</h2>
+            <h2>The Architect's HUD</h2>
             <dl>
-                <dt>Quadrant 1: Intentional Extraction</dt>
-                <dd>Systems designed to break agency for profit/control (e.g., Apartheid, Thiokol Management).<br><strong>Response: Resistance.</strong></dd>
-                
-                <dt>Quadrant 2: Incidental Depletion</dt>
-                <dd>Systems that burn agents out through poor design (e.g., Healthcare during COVID, NASA schedules).<br><strong>Response: Boundary Setting & Redesign.</strong></dd>
-                
-                <dt>The Core Truth</dt>
-                <dd>Whether caused by malice or mistakes, <strong>Substrate Damage is Identical</strong>. P-Adic trees truncate regardless of "good intentions."</dd>
+                <dt>The Canary Signal</dt>
+                <dd>The first agents to turn red. They have the lowest metabolic budgets. Their failure predicts systemic collapse.</dd>
                 
                 <dt>Schelling Dynamics</dt>
-                <dd>When local "rational" survival choices (truncation) lead to a global collapse of coherence.</dd>
+                <dd>The process where local failures (red dots) create feedback loops that drain the energy of their neighbors.</dd>
 
-                <dt>The Roger Boisjoly Case</dt>
-                <dd>NASA (Incidental/Redesign) vs. Thiokol (Intentional/Resistance). Mistaking one for the other leads to systemic catastrophe.</dd>
+                <dt>The Extraction Matrix</dt>
+                <dd><strong>Incidental Depletion:</strong> High load, poor design. Response: <em>Redesign</em>.<br>
+                    <strong>Intentional Extraction:</strong> Malicious profit/control. Response: <em>Resistance</em>.</dd>
+                
+                <dt>Tipping Point</dt>
+                <dd>If > 20% of agents truncate, System Lambda ($\lambda$) crashes exponentially.</dd>
             </dl>
-            
             
             
         </aside>
@@ -128,107 +130,99 @@
 </div>
 
 <script>
-    const map = document.getElementById('agent-map');
-    const agents = [];
-    let scenarioIdx = -1;
-    let score = 0;
-    let totalScenarios = 2;
+    const grid = document.getElementById('grid');
+    const agentData = [];
+    let activeBond = null;
+    let maxTruncated = 0;
 
-    // Initialize 1,000 agents
-    function initMap() {
-        map.innerHTML = '';
+    // Initialize 1,000 agents with randomized thresholds (Canary logic)
+    function initAgents() {
+        grid.innerHTML = '';
         for (let i = 0; i < 1000; i++) {
             const el = document.createElement('div');
             el.className = 'agent';
-            map.appendChild(el);
-            agents.push(el);
+            grid.appendChild(el);
+            
+            // Random threshold: some agents are "canaries" (break at 0.4), others are tough (break at 0.8)
+            const threshold = 0.4 + (Math.random() * 0.45);
+            agentData.push({ el, threshold, truncated: false });
         }
     }
-
-    const scenarios = [
-        {
-            title: "Phase 1: The Roger Boisjoly Audit",
-            desc: "NASA's schedule is causing INCIDENTAL DEPLETION. Thiokol Management is using INTENTIONAL EXTRACTION to force a launch. How do you respond?",
-            split: { intentional: 300, incidental: 700 }, // 300 Thiokol, 700 NASA
-            correct: "both", 
-            rationale: "Correct. You Redesigned NASA's schedule and Resisted Thiokol's threats. The O-rings held."
-        },
-        {
-            title: "Phase 2: Pandemic Surge",
-            desc: "1,000 medical agents are suffering from massive INCIDENTAL DEPLETION. There is no malice, only poor system architecture.",
-            split: { intentional: 0, incidental: 1000 },
-            correct: "redesign",
-            rationale: "Correct. Resistance against a crisis is friction; Redesigning the metabolic support (BioBonds) is the only way to save the BRC."
-        }
-    ];
 
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-    
-    function loadNextScenario() {
-        scenarioIdx++;
-        if (scenarioIdx >= totalScenarios) return showFinalAudit();
+
+    function updateSim() {
+        let load = parseFloat(document.getElementById('load-slider').value);
+        document.getElementById('load-readout').innerText = load.toFixed(2);
         
-        const s = scenarios[scenarioIdx];
-        document.getElementById('scenario-title').innerText = s.title;
-        document.getElementById('scenario-desc').innerText = s.desc;
-        
-        // Update Map Visuals
-        agents.forEach((a, i) => {
-            a.className = 'agent';
-            if (i < s.split.intentional) a.classList.add('intentional');
-            else if (i < (s.split.intentional + s.split.incidental)) a.classList.add('incidental');
+        let currentTruncated = 0;
+
+        agentData.forEach(agent => {
+            let effectiveLoad = load;
+            
+            // If the wrong bond is applied, stress actually increases (System eats the help)
+            if (activeBond === 'redesign' && load > 0.7) effectiveLoad += 0.1;
+
+            // Bond Buffs
+            if (activeBond === 'redesign' && load < 0.7) effectiveLoad -= 0.15;
+            if (activeBond === 'resistance' && load > 0.7) effectiveLoad -= 0.2;
+
+            if (effectiveLoad > agent.threshold) {
+                agent.truncated = true;
+                agent.el.className = 'agent truncated';
+                currentTruncated++;
+            } else {
+                agent.truncated = false;
+                agent.el.className = 'agent' + (agent.threshold < 0.5 ? ' canary' : '');
+                if (activeBond) agent.el.classList.add('protected');
+            }
         });
 
-        document.getElementById('next-btn').classList.add('hidden');
-        document.getElementById('action-area').classList.remove('hidden');
-        updateMetrics(0.75, 0.25, 80);
-    }
+        // Tipping Point Dynamics: If many are truncated, Lambda crashes
+        let ratio = currentTruncated / 1000;
+        if (ratio > maxTruncated) maxTruncated = ratio;
 
-    function deployBond(type) {
-        const s = scenarios[scenarioIdx];
-        let success = false;
+        let lambda = Math.max(0, 1 - (ratio * 1.5));
+        let entropy = ratio * 1.2;
 
-        if (scenarioIdx === 0) { // Boisjoly Case needs BOTH or specific sequence
-            // For simplicity in this demo, we check if they eventually get the right tools
-            success = true; // In a full build, this would track if they clicked both buttons
-        } else if (scenarioIdx === 1) {
-            success = (type === 'redesign');
-        }
-
-        if (success) {
-            score++;
-            agents.forEach(a => { if(!a.classList.contains('intentional')) a.className = 'agent protected'; });
-            updateMetrics(0.98, 0.02, 100);
-            alert(s.rationale);
-        } else {
-            alert("FAILURE: If you apply Redesign to an Intentional system, the system 'eats' the help. The extraction rate has spiked.");
-            updateMetrics(0.40, 0.60, 50);
-        }
-
-        document.getElementById('action-area').classList.add('hidden');
-        document.getElementById('next-btn').classList.remove('hidden');
-        document.getElementById('next-btn').innerText = "Analyze Next Systemic Shock";
-    }
-
-    function updateMetrics(lambda, entropy, fidelity) {
         document.getElementById('lambda-val').innerText = lambda.toFixed(2);
+        document.getElementById('trunc-val').innerText = currentTruncated;
         document.getElementById('entropy-val').innerText = entropy.toFixed(2);
-        document.getElementById('fidelity-val').innerText = fidelity + "%";
+        
+        if (ratio > 0.2) {
+            document.getElementById('lambda-val').style.color = "var(--danger-red)";
+        } else {
+            document.getElementById('lambda-val').style.color = "var(--matrix-green)";
+        }
     }
 
-    function showFinalAudit() {
+    function applyBond(type) {
+        activeBond = type;
+        updateSim();
+        alert(`UCP EVENT: ${type.toUpperCase()} BOND DEPLOYED. Monitoring systemic resonance...`);
+    }
+
+    function generateAudit() {
         const audit = document.getElementById('audit-content');
-        let status = score >= 2 ? "SYSTEMS COHERENCE ACHIEVED" : "SYSTEMIC COLLAPSE";
+        let load = parseFloat(document.getElementById('load-slider').value);
+        let success = (maxTruncated < 0.25 && activeBond !== null);
+
         audit.innerHTML = `
-            <h3>${status}</h3>
-            <div class="audit-card">GLOBAL SCORE: ${score}/${totalScenarios} STABILIZED SYSTEMS</div>
-            <p><strong>Systems Architect Review:</strong></p>
-            <p>${score === 2 ? "You have proven that you can distinguish between the 'Source of Harm.' By matching Resistance to Malice and Redesign to Depletion, you prevented the Tipping Point." : "TRUTHFUL ASSESSMENT: You failed the Boisjoly or Pandemic test. You tried to negotiate with extraction or fight a design error. The result was 1,000 truncated agents."}</p>
+            <h3 style="color:${success ? 'var(--gold)' : 'var(--danger-red)'}">${success ? 'COHERENT ARCHITECTURE' : 'SYSTEMIC COLLAPSE'}</h3>
+            <div class="audit-card">MAX TRUNCATION REACHED: ${(maxTruncated * 100).toFixed(1)}%</div>
+            <p><strong>Review of Your Strategy:</strong></p>
+            <ul>
+                <li><strong>The Canary Signal:</strong> ${maxTruncated > 0.1 ? "You noticed the canaries flickering but " + (success ? "intervened in time." : "let the tipping point occur.") : "You kept the system remarkably stable."}</li>
+                <li><strong>Diagnosis:</strong> ${activeBond === 'redesign' && load < 0.7 ? "You correctly identified Incidental Depletion in the low-load phase." : ""} 
+                    ${activeBond === 'resistance' && load >= 0.7 ? "You correctly identified Intentional Extraction in the high-load 'Thiokol' phase." : ""}</li>
+            </ul>
+            <p><strong>Truthful Assessment:</strong> ${success ? "You are a Master Architect. You used your bonds to scaffold the vulnerable and protect the species-Lambda." : "You failed to protect the grid. You mistook malice for design, or design for malice. 1,000 agents paid the price in Agential Entropy."}</p>
         `;
         document.getElementById('audit-overlay').classList.remove('hidden');
     }
 
-    initMap();
+    initAgents();
+    updateSim();
 </script>
 </body>
 </html>
